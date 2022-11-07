@@ -2,9 +2,97 @@ import React from 'react'
 import { motion } from 'framer-motion'
 import { IoAdd, IoPause, IoPlay, IoTrash } from 'react-icons/io5'
 import { useState } from 'react'
+import { deleteSongById, deleteArtistById, deleteAlbumById, getAllSongs, getAllArtist, getAllAlbums } from '../api'
+import { useStateValue } from '../context/StateProvider'
+import { actionType } from '../context/reducer'
 
-const SongCard = ({ data, index }) => {
-  const [isDelete, setIsDelete] = useState(true)
+import { storage } from '../config/firebase.config'
+import {
+  getStorage,
+  ref,
+  getDownloadURL,
+  uploadBytesResumable,
+  deleteObject
+} from 'firebase/storage'
+
+const SongCard = ({ data, index, type }) => {
+  const [isDelete, setIsDelete] = useState(false)
+  const [{ allSongs, allArtists, allAlbums }, dispatch] = useStateValue()
+
+
+  const deleteAnObject = (referenceUrl) => {
+    const deleteRef = ref(storage, referenceUrl);
+    deleteObject(deleteRef)
+      .then(() => {
+        return true;
+      })
+      .catch((error) => {
+        return false;
+      });
+  };
+
+  const deleteCombo = (data, type) => {
+    if (type === "song") {
+
+      deleteAnObject(data.imageURL)
+      deleteAnObject(data.songURL)
+
+      deleteSongById(data._id).then((res) => {
+        if (res.data) {
+          console.log("Success Database");
+        } else {
+          console.log("Failed Database");
+        }
+      })
+
+      getAllSongs().then(data => {
+        dispatch({
+          type: actionType.SET_ALL_SONGS,
+          allSongs: data.song
+        })
+      })
+
+    }
+
+    if (type === "artist") {
+      deleteAnObject(data.imageURL)
+      deleteArtistById(data._id).then((res) => {
+        if (res.data) {
+          console.log("Success Database");
+        } else {
+          console.log("Failed Database");
+        }
+      })
+
+      getAllArtist().then((data) => {
+        dispatch({
+          type: actionType.SET_ALL_ARTISTS,
+          allArtists: data.artist,
+        })
+      });
+    }
+
+    if (type === "album") {
+      deleteAnObject(data.imageURL)
+      deleteAlbumById(data._id).then((res) => {
+        if (res.data) {
+          console.log("Success Database");
+        } else {
+          console.log("Failed Database");
+        }
+      })
+
+      getAllAlbums().then((data) => {
+        dispatch({
+          type: actionType.SET_ALL_ALBUMS,
+          allAlbums: data.album,
+        })
+      });
+    }
+
+  };
+
+
   return (
     <motion.div className='relative w-40 min-w-210 px-2 py-4 cursor-pointer hover:bg-gray-700 bg-gray-600 shadow-md rounded-lg flex flex-col items-center '>
       <motion.div className='w-40 min-w-[160px] min-h-[160px] rounded-lg drop-shadow-lg relative overflow-hidden'>
@@ -31,10 +119,45 @@ const SongCard = ({ data, index }) => {
         <motion.i
           whileTap={{ scale: 0.75 }}
           className='text-base text-red-400 drop-shadow-md hover:text-red-500'
+          onClick={() => {
+            setIsDelete(true)
+          }}
         >
           <IoTrash />
         </motion.i>
       </div>
+
+
+      {isDelete && (
+        <motion.div className='absolute inset-0 backdrop-blur-md bg-cardOverlay flex items-center justify-center flex-col px-4 py-2 gap-0'
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+        >
+          <p className='text-lg text-gray-200 font-semibold text-center'>Are you sure do you want to delete it</p>
+          <div className='flex items-center gap-4'>
+
+            <motion.button
+              whileTap={{ scale: 0.75 }}
+              className='text-sm font-semibold text-slate-800 px-2 py-1 bg-red-300 rounded-md hover:shadow-md uppercase'
+              onClick={() => { deleteCombo(data, type); }}
+            >
+              yes
+            </motion.button>
+
+            <motion.button
+              whileTap={{ scale: 0.75 }}
+              className='text-sm font-semibold text-slate-800 px-2 py-1 bg-green-300 rounded-md hover:shadow-md uppercase'
+              onClick={() => { setIsDelete(false) }}
+            >
+              no
+            </motion.button>
+
+          </div>
+        </motion.div>
+      )}
+
+
+
     </motion.div>
   )
 }
