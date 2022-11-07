@@ -81,7 +81,7 @@ const Dashboard = () => {
         </Routes>
       </div>
 
-      {alertType && <Alert type={'danger'} />}
+      {/* {alertType && <Alert type={'danger'} />} */}
     </div>
   )
 }

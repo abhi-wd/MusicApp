@@ -17,7 +17,7 @@ import {
 
 const SongCard = ({ data, index, type }) => {
   const [isDelete, setIsDelete] = useState(false)
-  const [{ allSongs, allArtists, allAlbums }, dispatch] = useStateValue()
+  const [{ allSongs, allArtists, allAlbums, songIndex, isSongPlaying }, dispatch] = useStateValue()
 
 
   const deleteAnObject = (referenceUrl) => {
@@ -92,9 +92,31 @@ const SongCard = ({ data, index, type }) => {
 
   };
 
+  const addToContext = () => {
+    // console.log(isSongPlaying);
+    if (!isSongPlaying) {
+      dispatch({
+        type: actionType.SET_ISSONG_PLAYING,
+        isSongPlaying: true,
+      })
+    }
+
+    // console.log(isSongPlaying);
+    // console.log(songIndex);
+
+    if (songIndex !== index) {
+      dispatch({
+        type: actionType.SET_SONG_INDEX,
+        songIndex: index,
+      })
+    }
+    // console.log(songIndex);
+  }
 
   return (
-    <motion.div className='relative w-40 min-w-210 px-2 py-4 cursor-pointer hover:bg-gray-700 bg-gray-600 shadow-md rounded-lg flex flex-col items-center '>
+    <motion.div className='relative w-40 min-w-210 px-2 py-4 cursor-pointer hover:bg-gray-700 bg-gray-600 shadow-md rounded-lg flex flex-col items-center '
+      onClick={type === "song" && addToContext}
+    >
       <motion.div className='w-40 min-w-[160px] min-h-[160px] rounded-lg drop-shadow-lg relative overflow-hidden'>
         <motion.img
           whileHover={{ scale: 1.05 }}
