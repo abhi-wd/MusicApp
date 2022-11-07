@@ -1,26 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { useStateValue } from "../context/StateProvider";
 import { IoMdClose } from "react-icons/io";
-import { IoArrowRedo, IoArrowUndo, IoMusicalNote } from "react-icons/io5";
+import { IoArrowRedo, IoMusicalNote } from "react-icons/io5";
 import { motion } from "framer-motion";
 
 import AudioPlayer from "react-h5-audio-player";
 import "react-h5-audio-player/lib/styles.css";
 import { actionType } from "../context/reducer";
-import { MdPlaylistPlay } from "react-icons/md";
 import { getAllSongs } from "../api";
 import { RiPlayListFill } from "react-icons/ri";
 
 const MusicPlayer = () => {
     const [isPlayList, setIsPlayList] = useState(false);
-    const [{ allSongs, songIndex, isSongPlaying, miniPlayer }, dispatch] =
-        useStateValue();
+    const [{ allSongs, songIndex, isSongPlaying, miniPlayer }, dispatch] = useStateValue();
 
 
     const closeMusicPlayer = () => {
         if (isSongPlaying) {
             dispatch({
-                type: actionType.SET_SONG_PLAYING,
+                type: actionType.SET_ISSONG_PLAYING,
                 isSongPlaying: false,
             });
         }
@@ -41,7 +39,7 @@ const MusicPlayer = () => {
     };
 
     const nextTrack = () => {
-        if (songIndex > allSongs.length) {
+        if (songIndex === allSongs.length - 1) {
             dispatch({
                 type: actionType.SET_SONG_INDEX,
                 songIndex: 0,
@@ -105,7 +103,7 @@ const MusicPlayer = () => {
 
                     <motion.i
                         whileTap={{ scale: 0.8 }}
-                    // onClick={() => setIsPlayList(!isPlayList)}
+                        onClick={() => setIsPlayList(!isPlayList)}
                     >
                         <RiPlayListFill className="text-red-400 hover:text-white text-3xl cursor-pointer" />
                     </motion.i>
@@ -160,29 +158,30 @@ const MusicPlayer = () => {
 };
 
 export const PlayListCard = () => {
-    const [{ allSongs, song, isSongPlaying }, dispatch] = useStateValue();
+    const [{ allSongs, songIndex, isSongPlaying }, dispatch] = useStateValue();
+
     useEffect(() => {
         if (!allSongs) {
-            getAllSongs().then((data) => {
+            getAllSongs().then(data => {
                 dispatch({
                     type: actionType.SET_ALL_SONGS,
-                    allSongs: data.data,
-                });
-            });
+                    allSongs: data.song
+                })
+            })
         }
     }, []);
 
-    const setCurrentPlaySong = (songindex) => {
+    const setCurrentPlaySong = (index) => {
         if (!isSongPlaying) {
             dispatch({
-                type: actionType.SET_SONG_PLAYING,
+                type: actionType.SET_ISSONG_PLAYING,
                 isSongPlaying: true,
             });
         }
-        if (song !== songindex) {
+        if (songIndex !== index) {
             dispatch({
-                type: actionType.SET_SONG,
-                song: songindex,
+                type: actionType.SET_SONG_INDEX,
+                songIndex: index,
             });
         }
     };
@@ -195,9 +194,10 @@ export const PlayListCard = () => {
                         initial={{ opacity: 0, translateX: -50 }}
                         animate={{ opacity: 1, translateX: 0 }}
                         transition={{ duration: 0.3, delay: index * 0.1 }}
-                        className={`group w-full p-4 hover:bg-card flex gap-3 items-center cursor-pointer ${music?._id === song._id ? "bg-card" : "bg-transparent"
+                        className={`group w-full p-4 hover:bg-card flex gap-3 items-center cursor-pointer ${music?._id === allSongs[songIndex]._id ? "bg-card" : "bg-transparent"
                             }`}
                         onClick={() => setCurrentPlaySong(index)}
+                        key={index}
                     >
                         <IoMusicalNote className="text-textColor group-hover:text-headingColor text-2xl cursor-pointer" />
 
