@@ -15,6 +15,9 @@ import { storage } from '../config/firebase.config'
 import { useStateValue } from '../context/StateProvider'
 import FilterButtons from './FilterButtons'
 
+import { toast } from 'react-toastify';
+
+
 import {
   getAllAlbums,
   getAllArtist,
@@ -133,11 +136,9 @@ const DashboardNewSong = () => {
 
   const saveSong = () => {
     if (!songImageUrl || !audioAsset || !songName) {
-      //   setSetAlert("error");
-      //   setAlertMsg("Required fields are missing");
-      //   setTimeout(() => {
-      //     setSetAlert(null);
-      //   }, 4000);
+      toast.warn("Something Missing", {
+        theme: "dark"
+      })
     } else {
       setIsImageLoading(true)
       setIsAudioLoading(true)

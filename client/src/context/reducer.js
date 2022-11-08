@@ -14,7 +14,9 @@ export const actionType = {
 
     //player
     SET_ISSONG_PLAYING: "SET_ISSONG_PLAYING",
-    SET_SONG_INDEX: "SET_SONG_INDEX"
+    SET_SONG_INDEX: "SET_SONG_INDEX",
+
+    SET_SEARCH_TERM: "SET_SEARCH_TERM",
 
 }
 
@@ -108,6 +110,38 @@ const reducer = (state, action) => {
             };
         }
 
+        case actionType.SET_SEARCH_TERM: {
+            return {
+                ...state,
+                searchTerm: action.searchTerm,
+            };
+        }
+
+        case actionType.SET_FILTER_TERM: {
+            return {
+                ...state,
+                filterTerm: action.filterTerm,
+            };
+        }
+        case actionType.SET_ARTIST_FILTER: {
+            return {
+                ...state,
+                artistFilter: action.artistFilter,
+            };
+        }
+        case actionType.SET_LANGUAGE_FILTER: {
+            return {
+                ...state,
+                languageFilter: action.languageFilter,
+            }
+        }
+
+        case actionType.SET_ALBUM_FILTER: {
+            return {
+                ...state,
+                albumFilter: action.albumFilter,
+            };
+        }
 
         default:
             return state;

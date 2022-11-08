@@ -6,6 +6,8 @@ import { deleteSongById, deleteArtistById, deleteAlbumById, getAllSongs, getAllA
 import { useStateValue } from '../context/StateProvider'
 import { actionType } from '../context/reducer'
 
+import { toast } from 'react-toastify';
+
 import { storage } from '../config/firebase.config'
 import {
   getStorage,
@@ -39,9 +41,13 @@ const SongCard = ({ data, index, type }) => {
 
       deleteSongById(data._id).then((res) => {
         if (res.data) {
-          console.log("Success Database");
+          toast.success("Deleted Successfully", {
+            theme: "dark"
+          })
         } else {
-          console.log("Failed Database");
+          toast.success("Something went Wrong", {
+            theme: "dark"
+          })
         }
       })
 
@@ -58,9 +64,13 @@ const SongCard = ({ data, index, type }) => {
       deleteAnObject(data.imageURL)
       deleteArtistById(data._id).then((res) => {
         if (res.data) {
-          console.log("Success Database");
+          toast.success("Deleted Successfully", {
+            theme: "dark"
+          })
         } else {
-          console.log("Failed Database");
+          toast.success("Something went Wrong", {
+            theme: "dark"
+          })
         }
       })
 
@@ -76,9 +86,13 @@ const SongCard = ({ data, index, type }) => {
       deleteAnObject(data.imageURL)
       deleteAlbumById(data._id).then((res) => {
         if (res.data) {
-          console.log("Success Database");
+          toast.success("Deleted Successfully", {
+            theme: "dark"
+          })
         } else {
-          console.log("Failed Database");
+          toast.success("Something went Wrong", {
+            theme: "dark"
+          })
         }
       })
 
@@ -111,21 +125,25 @@ const SongCard = ({ data, index, type }) => {
       })
     }
     // console.log(songIndex);
+    // Toastify
+    toast.success("Playing", {
+      theme: "dark"
+    })
   }
 
   return (
-    <motion.div className='relative w-40 min-w-210 px-2 py-4 cursor-pointer hover:bg-gray-700 bg-gray-600 shadow-md rounded-lg flex flex-col items-center '
-      onClick={type === "song" && addToContext}
+    <motion.div className='relative w-40 min-w-210 px-2 py-4 cursor-pointer  hover:bg-gray-700 bg-gray-600 shadow-md rounded-lg flex flex-col items-center '
     >
       <motion.div className='w-40 min-w-[160px] min-h-[160px] rounded-lg drop-shadow-lg relative overflow-hidden'>
         <motion.img
           whileHover={{ scale: 1.05 }}
           src={data.imageURL}
           className='w-full h-full rounded-lg object-cover'
+          onClick={type === "song" && addToContext}
         />
       </motion.div>
 
-      <p className='font-semibold my-2 text-center'>
+      <p className='font-semibold my-2 text-center' onClick={type === "song" && addToContext}>
         {data.name.length > 25 ? `${data.name.slice(0, 25)}...` : data.name}
 
         {data.artist && (

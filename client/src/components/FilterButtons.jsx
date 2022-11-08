@@ -5,11 +5,11 @@ import { motion } from "framer-motion";
 import { useStateValue } from "../context/StateProvider";
 import { actionType } from "../context/reducer";
 
-const FilterButtons = ({ filterData, flag }) => { 
+const FilterButtons = ({ filterData, flag }) => {
   const [filterName, setFilterName] = useState(null);
   const [filterMenu, setFilterMenu] = useState(false);
 
-  const [{ artistFilter, albumFilter, filterTerm, languageFilter}, dispatch] = useStateValue();
+  const [{ artistFilter, albumFilter, filterTerm, languageFilter }, dispatch] = useStateValue();
 
   const updateFilterButton = (name) => {
     setFilterName(name);
@@ -46,9 +46,8 @@ const FilterButtons = ({ filterData, flag }) => {
           </>
         )}
         <IoChevronDown
-          className={`text-base text-gray-100 duration-150 transition-all ease-in-out ${
-            filterMenu ? "rotate-180" : "rotate-0"
-          }`}
+          className={`text-base text-gray-100 duration-150 transition-all ease-in-out ${filterMenu ? "rotate-180" : "rotate-0"
+            }`}
         />
       </p>
       {filterData && filterMenu && (

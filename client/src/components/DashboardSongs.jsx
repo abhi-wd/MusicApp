@@ -32,7 +32,7 @@ const DashboardSongs = () => {
       <div className='w-full flex justify-center items-center gap-20'>
         <NavLink
           to='/dashboard/newSong'
-          className='lex items-center justify-center bg-gray-800 px-4 py-3 border rounded-md border-gray-300 hover:border-gray-500 hover:shadow-md cursor-pointer'
+          className='flex items-center justify-center bg-gray-800 px-4 py-3 border rounded-md border-gray-300 hover:border-gray-500 hover:shadow-md cursor-pointer'
         >
           <motion.div whileTap={{ scale: 0.75 }} onClick=''>
             <IoAdd className='text-2xl text-red-500 hover:text-red-600' />

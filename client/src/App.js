@@ -9,6 +9,9 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { validateUser } from './api'
 import { useStateValue } from './context/StateProvider';
 import { actionType } from './context/reducer';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 
 
@@ -60,7 +63,7 @@ const App = () => {
                     <Route path='/dashboard/*' element={<Dashboard />} />
 
                 </Routes>
-
+                <ToastContainer />
                 {isSongPlaying && (
                     <motion.div
                         initial={{ opacity: 0, y: 50 }}
