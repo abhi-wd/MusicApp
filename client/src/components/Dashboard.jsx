@@ -1,7 +1,6 @@
 import React from 'react'
 import { NavLink, Route, Routes } from 'react-router-dom'
 import Header from './Header'
-import Alert from './Alert'
 
 import { IoHome } from 'react-icons/io5'
 import { isActiveStyles, isNotActiveStyles } from '../utils/styles'
@@ -16,7 +15,6 @@ import DashboardArtists from './DashboardArtists'
 import DashboardNewSong from './DashboardNewSong'
 
 const Dashboard = () => {
-  const [{ alertType }, dispatch] = useStateValue()
 
   return (
     <div className='w-full h-auto flex flex-col items-center justify-center bg-gray-800'>
@@ -81,7 +79,6 @@ const Dashboard = () => {
         </Routes>
       </div>
 
-      {/* {alertType && <Alert type={'danger'} />} */}
     </div>
   )
 }

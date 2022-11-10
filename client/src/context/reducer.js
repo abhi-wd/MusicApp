@@ -10,7 +10,6 @@ export const actionType = {
     SET_LANGUAGE_FILTER: "SET_LANGUAGE_FILTER",
     SET_ALBUM_FILTER: "SET_ALBUM_FILTER",
 
-    SET_ALERT_TYPE: "SET_ALERT_TYPE",
 
     //player
     SET_ISSONG_PLAYING: "SET_ISSONG_PLAYING",
@@ -89,12 +88,6 @@ const reducer = (state, action) => {
             };
         }
 
-        case actionType.SET_ALERT_TYPE: {
-            return {
-                ...state,
-                alertType: action.alertType,
-            };
-        }
 
         case actionType.SET_ISSONG_PLAYING: {
             return {

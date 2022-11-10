@@ -149,7 +149,7 @@ const MusicPlayer = () => {
                     </motion.i>
 
                     <motion.i whileTap={{ scale: 0.8 }} onClick={closeMusicPlayer}>
-                        <IoMdClose className="text-gray-200 hover:text-red-300 text-2xl cursor-pointer" />
+                        <IoMdClose className="text-red-400 hover:text-white text-2xl cursor-pointer" />
                     </motion.i>
 
                     <motion.i whileTap={{ scale: 0.8 }} onClick={togglePlayer}>

@@ -44,6 +44,8 @@ const Filter = ({ setFilteredSongs }) => {
         dispatch({ type: actionType.SET_ALBUM_FILTER, albumFilter: null });
         dispatch({ type: actionType.SET_FILTER_TERM, filterTerm: null });
 
+        
+
     };
     return (
         <div className="w-full my-4 px-6 py-4 flex items-center justify-start md:justify-center gap-10">

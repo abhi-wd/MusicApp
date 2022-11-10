@@ -31,8 +31,6 @@ import { actionType } from '../context/reducer'
 
 import { filterByLanguage, filters } from '../utils/supportfunctions'
 
-// import AlertSuccess from "./AlertSuccess";
-// import AlertError from "./AlertError";
 
 export const DisabledButton = () => {
   return (
@@ -65,15 +63,12 @@ export const DisabledButton = () => {
 const DashboardNewSong = () => {
   const [isImageLoading, setIsImageLoading] = useState(false)
   const [songImageUrl, setSongImageUrl] = useState(null)
-  const [setAlert, setSetAlert] = useState(null)
-  const [alertMsg, setAlertMsg] = useState('')
   const [uploadProgress, setUploadProgress] = useState(0)
 
   const [isAudioLoading, setIsAudioLoading] = useState(false)
 
   const [songName, setSongName] = useState('')
   const [audioAsset, setAudioAsset] = useState(null)
-  const [duration, setDuration] = useState(null)
   const audioRef = useRef()
 
   const [
@@ -104,31 +99,20 @@ const DashboardNewSong = () => {
     }
   }, [])
 
-  //no use
-  const calculateTime = sec => {
-    const minutes = Math.floor(sec / 60)
-    const returnMin = minutes < 10 ? `0${minutes}` : `${minutes}`
-    const seconds = Math.floor(sec % 60)
-    const returnSec = seconds < 10 ? `0${seconds}` : `${seconds}`
-    return `${returnMin} : ${returnSec}`
-  }
 
   // for both audio and image
   const deleteImageObject = (songURL, action) => {
     if (action === 'image') {
       setIsImageLoading(true)
       setSongImageUrl(null)
+
     } else {
       setIsAudioLoading(true)
       setAudioAsset(null)
     }
+
     const deleteRef = ref(storage, songURL)
     deleteObject(deleteRef).then(() => {
-      setSetAlert('success')
-      setAlertMsg('File removed successfully')
-      setTimeout(() => {
-        setSetAlert(null)
-      }, 4000)
       setIsImageLoading(false)
       setIsAudioLoading(false)
     })
@@ -156,13 +140,10 @@ const DashboardNewSong = () => {
         getAllSongs().then(songs => {
           dispatch({ type: actionType.SET_ALL_SONGS, allSongs: songs.song })
         })
+        toast.success("Song Added Successfully", {
+          theme: "dark"
+        })
       })
-
-      //   setSetAlert("success");
-      //   setAlertMsg("Data saved successfully");
-      //   setTimeout(() => {
-      //     setSetAlert(null);
-      //   }, 4000);
 
       setIsImageLoading(false)
       setIsAudioLoading(false)
@@ -173,7 +154,6 @@ const DashboardNewSong = () => {
       dispatch({ type: actionType.SET_LANGUAGE_FILTER, languageFilter: null })
       dispatch({ type: actionType.SET_ALBUM_FILTER, albumFilter: null })
       dispatch({ type: actionType.SET_FILTER_TERM, filterTerm: 'all' })
-      setDuration(null)
     }
   }
 
@@ -204,8 +184,6 @@ const DashboardNewSong = () => {
                   {!songImageUrl ? (
                     <ImageUploader
                       setImageURL={setSongImageUrl}
-                      setAlert={setSetAlert}
-                      alertMsg={setAlertMsg}
                       isLoading={setIsImageLoading}
                       setProgress={setUploadProgress}
                       isImage={true}
@@ -239,8 +217,6 @@ const DashboardNewSong = () => {
                   {!audioAsset ? (
                     <ImageUploader
                       setImageURL={setAudioAsset}
-                      setAlert={setSetAlert}
-                      alertMsg={setAlertMsg}
                       isLoading={setIsAudioLoading}
                       setProgress={setUploadProgress}
                       isImage={false}
@@ -284,16 +260,6 @@ const DashboardNewSong = () => {
           <AddNewAlbum />
         </div>
       </div>
-
-      {/* {setAlert && (
-      <>
-        {setAlert === "success" ? (
-          <AlertSuccess msg={alertMsg} />
-        ) : (
-          <AlertError msg={alertMsg} />
-        )}
-      </>
-    )} */}
     </div>
   )
 }
@@ -315,8 +281,6 @@ export const FileLoader = ({ progress }) => {
 // for both audio and image
 export const ImageUploader = ({
   setImageURL,
-  setAlert,
-  alertMsg,
   isLoading,
   isImage,
   setProgress
@@ -337,11 +301,6 @@ export const ImageUploader = ({
       },
 
       error => {
-        setAlert('error')
-        alertMsg('File upload failed.')
-        setTimeout(() => {
-          setAlert(null)
-        }, 4000)
         isLoading(false)
       },
       () => {
@@ -349,11 +308,6 @@ export const ImageUploader = ({
           setImageURL(downloadUrl)
           setProgress(0)
           isLoading(false)
-          setAlert('success')
-          alertMsg('File uploaded successfully')
-          setTimeout(() => {
-            setAlert(null)
-          }, 4000)
         })
       }
     )
@@ -386,8 +340,6 @@ export const AddNewArtist = () => {
   const [isArtist, setIsArtist] = useState(false)
   const [artistProgress, setArtistProgress] = useState(0)
 
-  const [alert, setAlert] = useState(false)
-  const [alertMsg, setAlertMsg] = useState(null)
   const [artistCoverImage, setArtistCoverImage] = useState(null)
 
   const [artistName, setArtistName] = useState('')
@@ -401,22 +353,15 @@ export const AddNewArtist = () => {
     setArtistCoverImage(null)
     const deleteRef = ref(storage, songURL)
     deleteObject(deleteRef).then(() => {
-      setAlert('success')
-      setAlertMsg('File removed successfully')
-      setTimeout(() => {
-        setAlert(null)
-      }, 4000)
       setIsArtist(false)
     })
   }
 
   const saveArtist = () => {
     if (!artistCoverImage || !artistName) {
-      // setAlert("error");
-      // setAlertMsg("Required fields are missing");
-      // setTimeout(() => {
-      //   setAlert(null);
-      // }, 4000);
+      toast.warn("Something Missing", {
+        theme: "dark"
+      })
     } else {
       setIsArtist(true)
       const data = {
@@ -432,6 +377,11 @@ export const AddNewArtist = () => {
             allArtists: artistData.artist
           })
         })
+
+        toast.success("Artist Added Successfully", {
+          theme: "dark"
+        })
+
       })
       setIsArtist(false)
       setArtistCoverImage(null)
@@ -450,8 +400,6 @@ export const AddNewArtist = () => {
             {!artistCoverImage ? (
               <ImageUploader
                 setImageURL={setArtistCoverImage}
-                setAlert={setAlert}
-                alertMsg={setAlertMsg}
                 isLoading={setIsArtist}
                 setProgress={setArtistProgress}
                 isImage={true}
@@ -528,15 +476,6 @@ export const AddNewArtist = () => {
         </div>
       </div>
 
-      {/* {alert && (
-          <>
-            {alert === "success" ? (
-              <AlertSuccess msg={alertMsg} />
-            ) : (
-              <AlertError msg={alertMsg} />
-            )}
-          </>
-        )} */}
     </div>
   )
 }
@@ -545,8 +484,6 @@ export const AddNewAlbum = () => {
   const [isArtist, setIsArtist] = useState(false)
   const [artistProgress, setArtistProgress] = useState(0)
 
-  const [alert, setAlert] = useState(false)
-  const [alertMsg, setAlertMsg] = useState(null)
   const [artistCoverImage, setArtistCoverImage] = useState(null)
 
   const [artistName, setArtistName] = useState('')
@@ -558,22 +495,15 @@ export const AddNewAlbum = () => {
     setArtistCoverImage(null)
     const deleteRef = ref(storage, songURL)
     deleteObject(deleteRef).then(() => {
-      setAlert('success')
-      setAlertMsg('File removed successfully')
-      setTimeout(() => {
-        setAlert(null)
-      }, 4000)
       setIsArtist(false)
     })
   }
 
   const saveArtist = () => {
     if (!artistCoverImage || !artistName) {
-      // setAlert("error");
-      // setAlertMsg("Required fields are missing");
-      // setTimeout(() => {
-      //   setAlert(null);
-      // }, 4000);
+      toast.warn("Something Missing", {
+        theme: "dark"
+      })
     } else {
       setIsArtist(true)
       const data = {
@@ -586,6 +516,9 @@ export const AddNewAlbum = () => {
             type: actionType.SET_ALL_ALBUMS,
             allAlbums: data.album
           })
+        })
+        toast.success("Album Added Successfully", {
+          theme: "dark"
         })
       })
       setIsArtist(false)
@@ -603,8 +536,6 @@ export const AddNewAlbum = () => {
             {!artistCoverImage ? (
               <ImageUploader
                 setImageURL={setArtistCoverImage}
-                setAlert={setAlert}
-                alertMsg={setAlertMsg}
                 isLoading={setIsArtist}
                 setProgress={setArtistProgress}
                 isImage={true}
@@ -655,15 +586,6 @@ export const AddNewAlbum = () => {
         </div>
       </div>
 
-      {/* {alert && (
-          <>
-            {alert === "success" ? (
-              <AlertSuccess msg={alertMsg} />
-            ) : (
-              <AlertError msg={alertMsg} />
-            )}
-          </>
-        )} */}
     </div>
   )
 }
