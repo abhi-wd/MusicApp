@@ -4,6 +4,8 @@ const router = require("express").Router();
 
 const song = require("../models/song");
 
+const lyricsFinder = require("lyrics-finder")
+
 
 router.post("/save", async (req, res) => {
 
@@ -92,6 +94,20 @@ router.delete("/delete/:id", async (req, res) => {
     } else {
         return res.status(400).send({ success: false, msg: "Data Not Found" })
     }
+})
+
+router.get("/lyrics/:id", async (req, res) => {
+    const st = req.params.id;
+    const name = st.split('+')[0];
+    const artist = st.split('+')[1];
+    const data = (await lyricsFinder(name, artist)) || "No Lyrics Found"
+
+    if (data) {
+        return res.status(200).send({ success: true, lyrics: data })
+    } else {
+        return res.status(400).send({ success: false, msg: "Data Not Found" })
+    }
+
 })
 
 module.exports = router

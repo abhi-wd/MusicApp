@@ -130,3 +130,13 @@ export const deleteAlbumById = async (id) => {
         return null;
     }
 }
+
+
+export const getLyrics = async (id) => {
+    try {
+        const res = axios.get(`${baseURL}api/songs/lyrics/${id}`);
+        return (await res);
+    } catch (error) {
+        return null;
+    }
+}

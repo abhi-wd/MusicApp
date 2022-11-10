@@ -3,6 +3,7 @@ import { useStateValue } from "../context/StateProvider";
 import { IoMdClose } from "react-icons/io";
 import { IoArrowRedo, IoMusicalNote } from "react-icons/io5";
 import { motion } from "framer-motion";
+import { BsMusicNoteList } from 'react-icons/bs'
 
 import AudioPlayer from "react-h5-audio-player";
 import "react-h5-audio-player/lib/styles.css";
@@ -10,8 +11,14 @@ import { actionType } from "../context/reducer";
 import { getAllSongs } from "../api";
 import { RiPlayListFill } from "react-icons/ri";
 
+
+
+import { getLyrics } from '../api'
+
 const MusicPlayer = () => {
     const [isPlayList, setIsPlayList] = useState(false);
+    const [isLyrics, setIsLyrics] = useState(false);
+    const [lyrics, setlyrics] = useState("")
     const [{ allSongs, songIndex, isSongPlaying, miniPlayer }, dispatch] = useStateValue();
 
 
@@ -66,6 +73,9 @@ const MusicPlayer = () => {
         }
     };
 
+
+
+
     useEffect(() => {
         if (songIndex > allSongs.length) {
             dispatch({
@@ -73,7 +83,19 @@ const MusicPlayer = () => {
                 songIndex: 0,
             });
         }
+
+
+        const data = allSongs[songIndex]?.name + "+" + allSongs[songIndex]?.artist;
+
+        getLyrics(data).then((res) => {
+            setlyrics(res.data.lyrics);
+        });
+
+
+
     }, [songIndex]);
+
+
 
     return (
         <div className="w-full full flex items-center gap-3 overflow-hidden">
@@ -108,6 +130,7 @@ const MusicPlayer = () => {
                         <RiPlayListFill className="text-red-400 hover:text-white text-3xl cursor-pointer" />
                     </motion.i>
 
+
                 </div>
 
                 <div className="flex-1">
@@ -121,9 +144,14 @@ const MusicPlayer = () => {
                     />
                 </div>
                 <div className="h-full flex items-center justify-center flex-col gap-3">
+                    <motion.i whileTap={{ scale: 0.8 }} onClick={() => setIsLyrics(!isLyrics)}>
+                        <BsMusicNoteList className="text-gray-200 hover:text-red-300 text-2xl cursor-pointer" />
+                    </motion.i>
+
                     <motion.i whileTap={{ scale: 0.8 }} onClick={closeMusicPlayer}>
                         <IoMdClose className="text-gray-200 hover:text-red-300 text-2xl cursor-pointer" />
                     </motion.i>
+
                     <motion.i whileTap={{ scale: 0.8 }} onClick={togglePlayer}>
                         <IoArrowRedo className="text-gray-200 hover:text-red-300 text-2xl cursor-pointer" />
                     </motion.i>
@@ -135,6 +163,14 @@ const MusicPlayer = () => {
                     <PlayListCard />
                 </>
             )}
+
+            {
+                isLyrics && (
+                    <>
+                        <LyricsCard lyrics={lyrics} />
+                    </>
+                )
+            }
 
             {miniPlayer && (
                 <motion.div
@@ -187,31 +223,31 @@ export const PlayListCard = () => {
     };
 
     return (
-        <div className="absolute left-4 bottom-24 gap-2 py-2 w-350 max-w-[350px] h-510 max-h-[510px] flex flex-col overflow-y-scroll scrollbar-thin rounded-md shadow-md bg-primary">
+        <div className="absolute left-4 bottom-24 gap-2 py-2 w-350 max-w-[350px] h-510 max-h-[510px] flex flex-col overflow-y-scroll scrollbar-thin rounded-md shadow-md backdrop-blur-sm bg-gray-700">
             {allSongs.length > 0 ? (
                 allSongs.map((music, index) => (
                     <motion.div
                         initial={{ opacity: 0, translateX: -50 }}
                         animate={{ opacity: 1, translateX: 0 }}
                         transition={{ duration: 0.3, delay: index * 0.1 }}
-                        className={`group w-full p-4 hover:bg-card flex gap-3 items-center cursor-pointer ${music?._id === allSongs[songIndex]._id ? "bg-card" : "bg-transparent"
+                        className={`group w-full p-4 hover:bg-card flex  gap-3 items-center cursor-pointer ${music?._id === allSongs[songIndex]._id ? "bg-card" : "bg-transparent"
                             }`}
                         onClick={() => setCurrentPlaySong(index)}
                         key={index}
                     >
-                        <IoMusicalNote className="text-textColor group-hover:text-headingColor text-2xl cursor-pointer" />
+                        <IoMusicalNote className="text-white group-hover:text-red-400 text-2xl cursor-pointer" />
 
                         <div className="flex items-start flex-col">
-                            <p className="text-lg text-headingColor font-semibold">
+                            <p className="text-lg text-white font-semibold group-hover:text-red-400">
                                 {`${music?.name.length > 20
                                     ? music?.name.slice(0, 20)
                                     : music?.name
                                     }`}{" "}
                                 <span className="text-base">({music?.album})</span>
                             </p>
-                            <p className="text-textColor">
+                            <p className="text-gray-200 group-hover:text-red-300">
                                 {music?.artist}{" "}
-                                <span className="text-sm text-textColor font-semibold">
+                                <span className="text-sm text-gray-200 font-semibold">
                                     ({music?.category})
                                 </span>
                             </p>
@@ -221,6 +257,18 @@ export const PlayListCard = () => {
             ) : (
                 <></>
             )}
+        </div>
+    );
+};
+
+export const LyricsCard = ({ lyrics }) => {
+
+
+    return (
+        <div className="absolute right-4 bottom-28 gap-2 px-4 py-2 w-350 max-w-[350px] h-510 max-h-[510px] flex flex-col overflow-y-scroll scrollbar-thin rounded-md shadow-md bg-gray-700 text-gray-200">
+            <p>
+                {lyrics}
+            </p>
         </div>
     );
 };
