@@ -16,6 +16,7 @@ export const actionType = {
     SET_SONG_INDEX: "SET_SONG_INDEX",
 
     SET_SEARCH_TERM: "SET_SEARCH_TERM",
+    SET_MINI_PLAYER: "SET_MINI_PLAYER",
 
 }
 
@@ -116,6 +117,7 @@ const reducer = (state, action) => {
                 filterTerm: action.filterTerm,
             };
         }
+        
         case actionType.SET_ARTIST_FILTER: {
             return {
                 ...state,
@@ -133,6 +135,13 @@ const reducer = (state, action) => {
             return {
                 ...state,
                 albumFilter: action.albumFilter,
+            };
+        }
+
+        case actionType.SET_MINI_PLAYER: {
+            return {
+                ...state,
+                miniPlayer: action.miniPlayer,
             };
         }
 

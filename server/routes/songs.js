@@ -100,7 +100,7 @@ router.get("/lyrics/:id", async (req, res) => {
     const st = req.params.id;
     const name = st.split('+')[0];
     const artist = st.split('+')[1];
-    const data = (await lyricsFinder(name, artist)) || "No Lyrics Found"
+    const data = (await lyricsFinder(name, artist)) || "Currently No Lyrics Found"
 
     if (data) {
         return res.status(200).send({ success: true, lyrics: data })

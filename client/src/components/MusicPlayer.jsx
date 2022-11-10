@@ -45,6 +45,8 @@ const MusicPlayer = () => {
         }
     };
 
+
+
     const nextTrack = () => {
         if (songIndex === allSongs.length - 1) {
             dispatch({
@@ -141,6 +143,7 @@ const MusicPlayer = () => {
                         showSkipControls={true}
                         onClickNext={nextTrack}
                         onClickPrevious={previousTrack}
+                        onEnded={nextTrack}
                     />
                 </div>
                 <div className="h-full flex items-center justify-center flex-col gap-3">
@@ -179,7 +182,7 @@ const MusicPlayer = () => {
                     className="fixed right-2 bottom-2 "
                 >
                     <div className="w-40 h-40 rounded-full flex items-center justify-center  relative ">
-                        <div className="absolute inset-0 rounded-full bg-red-600 blur-xl animate-pulse"></div>
+                        <div className="absolute inset-0 rounded-full bg-red-400 blur-xl animate-pulse"></div>
                         <img
                             onClick={togglePlayer}
                             src={allSongs[songIndex]?.imageURL}
