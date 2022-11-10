@@ -63,7 +63,18 @@ const App = () => {
                     <Route path='/dashboard/*' element={<Dashboard />} />
 
                 </Routes>
-                <ToastContainer />
+                <ToastContainer
+                    position="top-right"
+                    autoClose={2000}
+                    hideProgressBar={false}
+                    newestOnTop
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover={false}
+                    theme="dark"
+                />
                 {isSongPlaying && (
                     <motion.div
                         initial={{ opacity: 0, y: 50 }}
