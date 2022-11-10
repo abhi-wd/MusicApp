@@ -67,10 +67,10 @@ const Header = () => {
                     </NavLink>
                 </li>
                 <li className='mx-5 text-lg'>
-                    <NavLink to={"/musics"} className={({ isActive }) => isActive ? isActiveStyles : isNotActiveStyles}>
+                    <NavLink to={"/exclusive"} className={({ isActive }) => isActive ? isActiveStyles : isNotActiveStyles}>
                         <IconContext.Provider value={{ size: '24px', className: 'mx-5 text-lg' }}>
                             {<FaMusic />}
-                            <p className='text-lg text-center'>Musics</p>
+                            <p className='text-lg text-center'>Exclusive</p>
                         </IconContext.Provider>
                     </NavLink>
                 </li>
