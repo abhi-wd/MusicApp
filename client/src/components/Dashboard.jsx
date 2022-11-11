@@ -5,7 +5,6 @@ import Header from './Header'
 import { IoHome } from 'react-icons/io5'
 import { isActiveStyles, isNotActiveStyles } from '../utils/styles'
 
-import { useStateValue } from '../context/StateProvider'
 
 import DashboardHome from './DashboardHome'
 import DashboardUsers from './DashboardUsers'

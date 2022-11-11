@@ -79,8 +79,6 @@ const DashboardNewSong = () => {
       albumFilter,
       filterTerm,
       languageFilter,
-      allSongs,
-      alertType
     },
     dispatch
   ] = useStateValue()
@@ -488,7 +486,7 @@ export const AddNewAlbum = () => {
 
   const [artistName, setArtistName] = useState('')
 
-  const [{ artists }, dispatch] = useStateValue()
+  const [{ allArtists }, dispatch] = useStateValue()
 
   const deleteImageObject = songURL => {
     setIsArtist(true)

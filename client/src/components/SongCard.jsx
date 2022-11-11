@@ -1,6 +1,6 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import { IoAdd, IoPause, IoPlay, IoTrash } from 'react-icons/io5'
+import { IoTrash } from 'react-icons/io5'
 import { useState } from 'react'
 import { deleteSongById, deleteArtistById, deleteAlbumById, getAllSongs, getAllArtist, getAllAlbums } from '../api'
 import { useStateValue } from '../context/StateProvider'
@@ -12,8 +12,6 @@ import { storage } from '../config/firebase.config'
 import {
   getStorage,
   ref,
-  getDownloadURL,
-  uploadBytesResumable,
   deleteObject
 } from 'firebase/storage'
 
