@@ -3,7 +3,7 @@ import { getStorage } from 'firebase/storage'
 
 
 const firebaseConfig = {
-    
+    // firebase Configuration is added with all key
 };
 
 
